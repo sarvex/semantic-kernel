@@ -256,17 +256,17 @@ class ActionPlanner:
         available_functions = []
 
         for functions in functions_view.native_functions.values():
-            for func in functions:
-                if func.skill_name.lower() == self._skill_name.lower():
-                    continue
-                available_functions.append(self._create_function_string(func))
-
+            available_functions.extend(
+                self._create_function_string(func)
+                for func in functions
+                if func.skill_name.lower() != self._skill_name.lower()
+            )
         for functions in functions_view.semantic_functions.values():
-            for func in functions:
-                if func.skill_name.lower() == self._skill_name.lower():
-                    continue
-                available_functions.append(self._create_function_string(func))
-
+            available_functions.extend(
+                self._create_function_string(func)
+                for func in functions
+                if func.skill_name.lower() != self._skill_name.lower()
+            )
         available_functions_str = "\n".join(available_functions)
 
         self._logger.info(f"List of available functions:\n{available_functions_str}")
@@ -306,14 +306,12 @@ class ActionPlanner:
             if (result := self._create_parameter_string(x)) is not None
         ]
 
-        if len(parameters_list) == 0:
+        if not parameters_list:
             parameters = "No parameters."
         else:
             parameters = "\n".join(parameters_list)
 
-        func_str = f"{description}\n{name}\n{parameters}"
-
-        return func_str
+        return f"{description}\n{name}\n{parameters}"
 
     def _create_parameter_string(self, parameter: ParameterView) -> str:
         """

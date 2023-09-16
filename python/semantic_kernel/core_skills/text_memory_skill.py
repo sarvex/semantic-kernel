@@ -74,7 +74,7 @@ class TextMemorySkill(PydanticField):
             if context.variables.contains_key(TextMemorySkill.RELEVANCE_PARAM)
             else TextMemorySkill.DEFAULT_RELEVANCE
         )
-        if relevance is None or str(relevance).strip() == "":
+        if relevance is None or not str(relevance).strip():
             relevance = TextMemorySkill.DEFAULT_RELEVANCE
 
         limit = (
@@ -82,7 +82,7 @@ class TextMemorySkill(PydanticField):
             if context.variables.contains_key(TextMemorySkill.LIMIT_PARAM)
             else TextMemorySkill.DEFAULT_LIMIT
         )
-        if limit is None or str(limit).strip() == "":
+        if limit is None or not str(limit).strip():
             limit = TextMemorySkill.DEFAULT_LIMIT
 
         results = await context.memory.search_async(
