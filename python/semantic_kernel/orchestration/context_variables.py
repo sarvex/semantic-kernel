@@ -59,10 +59,7 @@ class ContextVariables(SKBaseModel):
 
     def get(self, name: str) -> Tuple[bool, str]:
         name = name.lower()
-        if name in self.variables:
-            return True, self.variables[name]
-
-        return False, ""
+        return (True, self.variables[name]) if name in self.variables else (False, "")
 
     def __getitem__(self, name: str) -> str:
         name = name.lower()
